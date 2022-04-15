@@ -1,0 +1,21 @@
+table {
+    border-collapse: collapse;
+
+  }
+  
+  td, tr {
+    border: 1px solid #999;
+    padding: 1.6rem;
+    text-align: left;
+  }
+
+body {
+    display: flex; justify-content: center; align-items: center; height: 80vh;
+}
+
+  table tr:nth-child(odd) td:nth-child(even) {
+    background-color: rgba(20, 20, 200, 0.7);
+  }
+  table tr:nth-child(even) td:nth-child(odd) {
+    background-color: rgba(20, 20, 200, 0.7);
+  }
