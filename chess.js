@@ -15,6 +15,25 @@ class Piece {
       this.type = type;
       this.player = player;
     }
+
+    getPossibleMoves() {
+        let result = []
+        if (this.type === "pawn") {
+            let possibleMoves = this.getPawnMoves()
+            console.log('before', possibleMoves) //test
+            for (let i = 0; i <possibleMoves.length; i++) {
+                possibleMoves[i][0] += this.row;
+                possibleMoves[i][1] += this.col;
+            }
+            console.log('after', possibleMoves);
+        }
+
+
+        return result //the result is not linked to the change done in the loop
+    }
+    getPawnMoves(){
+        return[[0, 1]];
+    }
   }
 
   function getInitialBoard() {
@@ -46,11 +65,11 @@ class Piece {
 
 function addImage(cell, type, name) {
   const image = document.createElement('img');
-  image.src =  type + '/' + name + '.png';
+  image.src =  type + '/' + name + '.png'; //dependes on saved location
   cell.appendChild(image);
 }
 
-function onCellClick(event) {
+function onCellClick(event) { //colors cell
     if (selectedCell !== undefined) {
       selectedCell.classList.remove('selected');
     }
@@ -58,7 +77,7 @@ function onCellClick(event) {
     selectedCell.classList.add('selected');
   }
 
-  function onPieceClick(event) {
+  function onPieceClick(event) { //supposed to be used for second kind of marker
     if (selectedPiece !== undefined && selectedPiece !== selectedCell) {
       selectedPiece.classList.remove('selected2');
     }
@@ -69,9 +88,9 @@ function onCellClick(event) {
 function createChessBoard() {
   const table1 = document.createElement('table');
   document.body.appendChild(table1);
-  for (let i = 0; i < BOARD_SIZE; i++) {
+  for (let i = 0; i < BOARD_SIZE; i++) { 
     const row = table1.insertRow();
-    for (let j = 0; j < BOARD_SIZE; j++) {
+    for (let j = 0; j < BOARD_SIZE; j++) { 
       const cell = row.insertCell();
       cell.id = "cell-" + i.toString() + "_" + j.toString();
       cell.addEventListener('click', onCellClick);
@@ -79,6 +98,8 @@ function createChessBoard() {
         }
     }
     pieces = getInitialBoard();
+    console.log(pieces) //test
+    pieces[20].getPossibleMoves();
 
     for (let piece of pieces) {
         addImage(table1.rows[piece.row].cells[piece.col], piece.player, piece.type);
