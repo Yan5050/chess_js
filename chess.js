@@ -78,11 +78,21 @@ class Piece {
     }
     getBishopMoves(){
         // diffrent mvmnt for black
-        return[[1, 0]];
-    }
+        let result = [];
+        for (let i = 1; i < BOARD_SIZE; i++) {
+        result.push([i, i]);
+        result.push([-i, -i]);
+        }    }
     getKingMoves(){
-        // diffrent mvmnt for black
-        return[[1, 0]];
+        let result = [];
+        for (let row = 0; row <= 2; row++){
+            for (let col = 0; col <= 2; col++){
+                if (row !== 0 || col !== 0) {
+                    result.push([row, col])
+                }
+            }
+        }
+
     }
     getQueenMoves(){
         // diffrent mvmnt for black
@@ -90,7 +100,7 @@ class Piece {
     }
   }
 
-  function getInitialBoard() {
+  function getInitialBoard() { //need to not use double statments
     let result = [];
     result.push(new Piece(0, 0, ROOK, WHITE_TYPE))
     result.push(new Piece(0, 1, KNIGHT, WHITE_TYPE))
@@ -122,9 +132,11 @@ function addImage(cell, type, name) {
   image.src =  type + '/' + name + '.png'; //dependes on saved location
   cell.appendChild(image);
 }
+//colors cell
+function onCellClick(event, row, col) {
+    
 
-function onCellClick(event) { //colors cell
-    if (selectedCell !== undefined) {
+    if (selectedCell !== undefined) { //need to fix this, makes the green color not visable
       selectedCell.classList.remove('selected');
     }
     selectedCell = event.currentTarget;
@@ -143,22 +155,23 @@ function createChessBoard() {
     //creates the board
   const table1 = document.createElement('table');
   document.body.appendChild(table1);
-  for (let i = 0; i < BOARD_SIZE; i++) { 
+  for (let row = 0; row < BOARD_SIZE; row++) { 
     const rowElement = table1.insertRow();
-    for (let j = 0; j < BOARD_SIZE; j++) { 
+    for (let col = 0; col < BOARD_SIZE; col++) { 
       const cell = rowElement.insertCell();
-      if ((i + j) % 2 === 0) {
+      if ((row + col) % 2 === 0) {
         cell.className = 'white-cell';
     }else {
         cell.className = 'black-cell'
     //   cell.id = "cell-" + i.toString() + "_" + j.toString();
         }
-        cell.addEventListener('click', onCellClick);
+        cell.addEventListener('click', (event) => onCellClick(event, row, col));
     }
   }
+
     pieces = getInitialBoard();
     // console.log(pieces) //test
-    // pieces[20].getPossibleMoves(); test
+    // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
 
 
     for (let piece of pieces) {

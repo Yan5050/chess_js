@@ -24,10 +24,10 @@ td:active {background-color: rgba(39, 218, 92, 0.8);}
     background-color: rgba(20, 20, 200, 0.7);
     z-index: 0;
   } */
-
+/* 
   .tagname {
     background: rgba(39, 218, 92, 0.384);
-  }
+  } */
   /* <tr style="background-color:&#x2654;">...</tr> */
 
   /* #id1_1 {
@@ -50,3 +50,7 @@ td:active {background-color: rgba(39, 218, 92, 0.8);}
   background-color: rgba(223, 40, 16, 0.8);
   z-index: -1;
 } */
+
+.possible-move{
+  background: rgba(231, 177, 61, 0.7);
+}
