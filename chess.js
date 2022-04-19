@@ -7,6 +7,13 @@ let selectedCell;
 let selectedPiece;
 let pieces = [];
 
+const PAWN = 'pawn'
+const ROOK = 'rook'
+const BISHOP = 'bishop'
+const KING = 'king'
+const QUEEN = 'queen'
+const KNIGHT = 'knight'
+
 
 class Piece {
     constructor(row, col, type, player) {
@@ -17,8 +24,8 @@ class Piece {
     }
 
     getPossibleMoves() {
-        let result = []
-        if (this.type === "pawn") {
+        let result = [];
+        if (this.type === PAWN) {
             let possibleMoves = this.getPawnMoves()
             console.log('before', possibleMoves) //test
             for (let i = 0; i <possibleMoves.length; i++) {
@@ -26,34 +33,84 @@ class Piece {
                 possibleMoves[i][1] += this.col;
             }
             console.log('after', possibleMoves);
-        }
+
+            
+            } else if(this.type == ROOK) {
+                realativeMoves = this.getRookMoves
+
+            } else if (this.type === KNIGHT) {
+                
+            } else if (this.type === BISHOP) {
+
+            } else if (this.type === KING) {
+
+            } else if (this.type === QUEEN) {
+            
+            }
+            let absouluteMoves = [];
+            for (let relativeMove of realativeMoves) {
+                absouluteMoves.push([realativeMoves[0] + this.row, realativeMoves[1] + this.col]);
+            }
+            let filteredMoves = [];
+            for (let absouluteMove of absouluteMoves) {
+                if (absouluteMove[0] >= 0 && absouluteMove[0] <= 7 && absouluteMove[1] >= 0 && absouluteMove[1] <= 7){
+                    filteredMoves.push(absouluteMove) ;
+                }
+            }
+            //make bounds, filter moves out of bound
 
 
         return result //the result is not linked to the change done in the loop
     }
     getPawnMoves(){
-        return[[0, 1]];
+        // diffrent mvmnt for black
+        return[[1, 0]];
+    }
+    getRookMoves(){
+        let result = [];
+        for (let i = 1; i < BOARD_SIZE; i++) {
+        result.push([i, 0]);
+        result.push([-i, 0]);
+        result.push([0, i]);
+        result.push([0, -i]);
+        }
+    }
+    getKnightMoves(){
+        // diffrent mvmnt for black
+        return[[1, 0]];
+    }
+    getBishopMoves(){
+        // diffrent mvmnt for black
+        return[[1, 0]];
+    }
+    getKingMoves(){
+        // diffrent mvmnt for black
+        return[[1, 0]];
+    }
+    getQueenMoves(){
+        // diffrent mvmnt for black
+        return[[1, 0]];
     }
   }
 
   function getInitialBoard() {
     let result = [];
-    result.push(new Piece(0, 0, "rook", WHITE_TYPE))
-    result.push(new Piece(0, 1, "knight", WHITE_TYPE))
-    result.push(new Piece(0, 2, "bishop", WHITE_TYPE))
-    result.push(new Piece(0, 3, "king", WHITE_TYPE))
-    result.push(new Piece(0, 4, "queen", WHITE_TYPE))
-    result.push(new Piece(0, 5, "bishop", WHITE_TYPE))
-    result.push(new Piece(0, 6, "knight", WHITE_TYPE))
-    result.push(new Piece(0, 7, "rook", WHITE_TYPE))
-    result.push(new Piece(7, 0, "rook", DARK_TYPE))
-    result.push(new Piece(7, 1, "knight", DARK_TYPE))
-    result.push(new Piece(7, 2, "bishop", DARK_TYPE))
-    result.push(new Piece(7, 4, "queen", DARK_TYPE))
-    result.push(new Piece(7, 3, "king", DARK_TYPE))
-    result.push(new Piece(7, 5, "bishop", DARK_TYPE))
-    result.push(new Piece(7, 6, "knight", DARK_TYPE))
-    result.push(new Piece(7, 7, "rook", DARK_TYPE))
+    result.push(new Piece(0, 0, ROOK, WHITE_TYPE))
+    result.push(new Piece(0, 1, KNIGHT, WHITE_TYPE))
+    result.push(new Piece(0, 2, BISHOP, WHITE_TYPE))
+    result.push(new Piece(0, 3, KING, WHITE_TYPE))
+    result.push(new Piece(0, 4, QUEEN, WHITE_TYPE))
+    result.push(new Piece(0, 5, BISHOP, WHITE_TYPE))
+    result.push(new Piece(0, 6, KNIGHT, WHITE_TYPE))
+    result.push(new Piece(0, 7, ROOK, WHITE_TYPE))
+    result.push(new Piece(7, 0, ROOK, DARK_TYPE))
+    result.push(new Piece(7, 1, KNIGHT, DARK_TYPE))
+    result.push(new Piece(7, 2, BISHOP, DARK_TYPE))
+    result.push(new Piece(7, 4, QUEEN, DARK_TYPE))
+    result.push(new Piece(7, 3, KING, DARK_TYPE))
+    result.push(new Piece(7, 5, BISHOP, DARK_TYPE))
+    result.push(new Piece(7, 6, KNIGHT, DARK_TYPE))
+    result.push(new Piece(7, 7, ROOK, DARK_TYPE))
     for (let k = 0; k < BOARD_SIZE; k++){
         result.push(new Piece(1, k, "pawn", WHITE_TYPE));
         result.push(new Piece(6, k, "pawn", DARK_TYPE));
