@@ -16,14 +16,14 @@ body {
 td:active {background-color: rgba(39, 218, 92, 0.8);}
 
 
-  table tr:nth-child(odd) td:nth-child(even) {
+  /* table tr:nth-child(odd) td:nth-child(even) {
     background-color: rgba(20, 20, 200, 0.7);
     z-index: 0;
   }
   table tr:nth-child(even) td:nth-child(odd) {
     background-color: rgba(20, 20, 200, 0.7);
     z-index: 0;
-  }
+  } */
 
   .tagname {
     background: rgba(39, 218, 92, 0.384);
@@ -36,9 +36,16 @@ td:active {background-color: rgba(39, 218, 92, 0.8);}
   
 .selected {
   background-color: rgba(39, 218, 92, 0.8);
-  z-index: 1;
 }
 
+
+.white-cell {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.black-cell {
+  background: rgba(20, 20, 200, 0.7);
+}
 /* .selected2 {
   background-color: rgba(223, 40, 16, 0.8);
   z-index: -1;

@@ -1,18 +1,20 @@
-
 const BOARD_SIZE = 8;
 const WHITE_TYPE = 'white';
 const DARK_TYPE = 'black';
+
+const PAWN = 'pawn';
+const ROOK = 'rook';
+const BISHOP = 'bishop';
+const KING = 'king';
+const QUEEN = 'queen';
+const KNIGHT = 'knight';
+
+// first "const" the "let"
 
 let selectedCell;
 let selectedPiece;
 let pieces = [];
 
-const PAWN = 'pawn'
-const ROOK = 'rook'
-const BISHOP = 'bishop'
-const KING = 'king'
-const QUEEN = 'queen'
-const KNIGHT = 'knight'
 
 
 class Piece {
@@ -24,48 +26,43 @@ class Piece {
     }
 
     getPossibleMoves() {
-        let result = [];
+        let relativeMove;
         if (this.type === PAWN) {
-            let possibleMoves = this.getPawnMoves()
-            console.log('before', possibleMoves) //test
-            for (let i = 0; i <possibleMoves.length; i++) {
-                possibleMoves[i][0] += this.row;
-                possibleMoves[i][1] += this.col;
-            }
-            console.log('after', possibleMoves);
-
-            
+            relativeMove = this.getPawnMoves();
             } else if(this.type == ROOK) {
-                realativeMoves = this.getRookMoves
-
+                relativeMove = this.getRookMoves();
             } else if (this.type === KNIGHT) {
-                
+                relativeMove = this.getKnightMoves();
             } else if (this.type === BISHOP) {
-
+                relativeMove = this.getBishopMoves();
             } else if (this.type === KING) {
-
+                relativeMove = this.getKingMoves();
             } else if (this.type === QUEEN) {
-            
+                relativeMove = this.getRookMoves();
             }
-            let absouluteMoves = [];
-            for (let relativeMove of realativeMoves) {
-                absouluteMoves.push([realativeMoves[0] + this.row, realativeMoves[1] + this.col]);
+            
+            
+        
+            let absoluteMoves = [];
+            for (let relativeMove of relativeMoves) {
+                absoluteMoves.push([relativeMove[0] + this.row, relativeMove[1] + this.col]);
             }
             let filteredMoves = [];
-            for (let absouluteMove of absouluteMoves) {
-                if (absouluteMove[0] >= 0 && absouluteMove[0] <= 7 && absouluteMove[1] >= 0 && absouluteMove[1] <= 7){
-                    filteredMoves.push(absouluteMove) ;
+            for (let absoluteMove of absoluteMoves) {
+                if (absoluteMove[0] >= 0 && absoluteMove[0] <= 7 && absoluteMove[1] >= 0 && absoluteMove[1] <= 7){
+                    filteredMoves.push(absoluteMove);
+                    return filteredMoves;
                 }
             }
             //make bounds, filter moves out of bound
 
 
-        return result //the result is not linked to the change done in the loop
     }
     getPawnMoves(){
         // diffrent mvmnt for black
         return[[1, 0]];
     }
+    
     getRookMoves(){
         let result = [];
         for (let i = 1; i < BOARD_SIZE; i++) {
@@ -143,20 +140,26 @@ function onCellClick(event) { //colors cell
   }
 
 function createChessBoard() {
+    //creates the board
   const table1 = document.createElement('table');
   document.body.appendChild(table1);
   for (let i = 0; i < BOARD_SIZE; i++) { 
-    const row = table1.insertRow();
+    const rowElement = table1.insertRow();
     for (let j = 0; j < BOARD_SIZE; j++) { 
-      const cell = row.insertCell();
-      cell.id = "cell-" + i.toString() + "_" + j.toString();
-      cell.addEventListener('click', onCellClick);
-      cell.addEventListener('click', onPieceClick);
+      const cell = rowElement.insertCell();
+      if ((i + j) % 2 === 0) {
+        cell.className = 'white-cell';
+    }else {
+        cell.className = 'black-cell'
+    //   cell.id = "cell-" + i.toString() + "_" + j.toString();
         }
+        cell.addEventListener('click', onCellClick);
     }
+  }
     pieces = getInitialBoard();
-    console.log(pieces) //test
-    pieces[20].getPossibleMoves();
+    // console.log(pieces) //test
+    // pieces[20].getPossibleMoves(); test
+
 
     for (let piece of pieces) {
         addImage(table1.rows[piece.row].cells[piece.col], piece.player, piece.type);
@@ -164,4 +167,3 @@ function createChessBoard() {
 }
 
 window.addEventListener('load', createChessBoard);
-
