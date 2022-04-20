@@ -1,7 +1,9 @@
 const BOARD_SIZE = 8;
+
 const WHITE_PLAYER = 'white';
 const BLACK_PLAYER = 'black';
 
+//if all the constants are the same as their names they are pretty pointless
 const PAWN = 'pawn';
 const ROOK = 'rook';
 const BISHOP = 'bishop';
@@ -14,8 +16,8 @@ const KNIGHT = 'knight';
 let selectedCell;
 let selectedPiece;
 let pieces = [];
-let boardData;
-let table;
+let boardData; //still not used
+const table = document.createElement('table');
 
 
 class Piece {
@@ -29,17 +31,17 @@ class Piece {
     getPossibleMoves() {
         let relativeMoves;
         if (this.type === PAWN) {
-            relativeMove = this.getPawnMoves();
+            relativeMoves = this.getPawnMoves();
         } else if (this.type == ROOK) {
-            relativeMove = this.getRookMoves();
+            relativeMoves = this.getRookMoves();
         } else if (this.type === KNIGHT) {
-            relativeMove = this.getKnightMoves();
+            relativeMoves = this.getKnightMoves();
         } else if (this.type === BISHOP) {
-            relativeMove = this.getBishopMoves();
+            relativeMoves = this.getBishopMoves();
         } else if (this.type === KING) {
-            relativeMove = this.getKingMoves();
+            relativeMoves = this.getKingMoves();
         } else if (this.type === QUEEN) {
-            relativeMove = this.getRookMoves();
+            relativeMoves = this.getRookMoves();
         }
 
 
@@ -117,23 +119,32 @@ class Piece {
         }
     }
     // breaks code(Unexpected identifier)
-    //   class BoardData {
-    //     constructor(pieces) {
-    //       this.pieces = pieces;
-    //     }
-
-
-    // getPiece(row, col) { not in use now, gets location
-    // }
+    
+    
 
 
 }
 
-function getInitialBoard() { //need to not use double statments
+//yuval code, NEED TO CHECK!!!
+class BoardData {
+    constructor(pieces) {
+      this.pieces = pieces;
+    }
+
+    getPiece(row, col) {
+        for (let i = 0; i < this.pieces.length; i++) {
+            if(this.pieces[i].row == row && this.pieces[i].col == col) {
+                return this.pieces[i];
+            }
+        }
+    }
+}
+
+function getInitialBoard() {
     let result = [];
 
-    coolPieces(result, 0, WHITE_PLAYER);
-    coolPieces(result, 7, BLACK_PLAYER);
+    specialPieces(result, 0, WHITE_PLAYER); //changed to special
+    specialPieces(result, 7, BLACK_PLAYER);
 
     for (let i = 0; i < BOARD_SIZE; i++) {
         result.push(new Piece(1, i, PAWN, WHITE_PLAYER));
@@ -141,7 +152,7 @@ function getInitialBoard() { //need to not use double statments
     }
     return result;
 }
-function coolPieces(result, row, player) {
+function specialPieces(result, row, player) {
     result.push(new Piece(row, 0, ROOK, player));
     result.push(new Piece(row, 1, KNIGHT, player));
     result.push(new Piece(row, 2, BISHOP, player));
@@ -167,9 +178,9 @@ function onCellClick(event, row, col) {
             table.rows[i].cells[j].classList.remove('possible-move');
         }
     }
-    const piece = boardData.getPiece(row, col);
+    const piece = boardData.getpiece(row,col); //make boardData global
     if (piece !== undefined) {
-        let possibleMoves = piece.getPossibleMoves();
+        let possibleMoves = piece.getPossibleMoves(); //this is not a piece, it's an html element
         for (let possibleMove of possibleMoves) {
             const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
             cell.classList.add('possible-move');
@@ -194,19 +205,19 @@ function onPieceClick(event) { //supposed to be used for second kind of marker
 
 function createChessBoard() {
     //creates the board
-    const table1 = document.createElement('table');
-    document.body.appendChild(table1);
-    for (let row = 0; row < BOARD_SIZE; row++) {
-        const rowElement = table1.insertRow();
+    document.body.appendChild(table);
+
+    for (let i = 0; i < BOARD_SIZE; i++) { //changed to i
+        const row = table.insertRow(); //changed to row
         for (let col = 0; col < BOARD_SIZE; col++) {
-            const cell = rowElement.insertCell();
-            if ((row + col) % 2 === 0) {
+            const cell = row.insertCell();
+            if ((i + col) % 2 === 0) {
                 cell.className = 'white-cell';
             } else {
                 cell.className = 'black-cell'
                 //   cell.id = "cell-" + i.toString() + "_" + j.toString();
             }
-            cell.addEventListener('click', (event) => onCellClick(event, row, col));
+            cell.addEventListener('click', (event) => onCellClick(event, i, col));
         }
     }
 
@@ -216,7 +227,7 @@ function createChessBoard() {
 
 
     for (let piece of pieces) {
-        addImage(table1.rows[piece.row].cells[piece.col], piece.player, piece.type);
+        addImage(table.rows[piece.row].cells[piece.col], piece.player, piece.type);
     }
 }
 
