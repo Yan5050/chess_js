@@ -1,6 +1,6 @@
 const BOARD_SIZE = 8;
-const WHITE_TYPE = 'white';
-const DARK_TYPE = 'black';
+const WHITE_PLAYER = 'white';
+const BLACK_PLAYER = 'black';
 
 const PAWN = 'pawn';
 const ROOK = 'rook';
@@ -14,7 +14,7 @@ const KNIGHT = 'knight';
 let selectedCell;
 let selectedPiece;
 let pieces = [];
-
+let table1; 
 
 
 class Piece {
@@ -26,7 +26,7 @@ class Piece {
     }
 
     getPossibleMoves() {
-        let relativeMove;
+        let relativeMoves;
         if (this.type === PAWN) {
             relativeMove = this.getPawnMoves();
             } else if(this.type == ROOK) {
@@ -59,7 +59,7 @@ class Piece {
 
     }
     getPawnMoves(){
-        // diffrent mvmnt for black
+        // need to add logic
         return[[1, 0]];
     }
     
@@ -73,11 +73,15 @@ class Piece {
         }
     }
     getKnightMoves(){
-        // diffrent mvmnt for black
+        //need to add logic
         return[[1, 0]];
     }
+
+
+          
+
     getBishopMoves(){
-        // diffrent mvmnt for black
+        //need to check logic
         let result = [];
         for (let i = 1; i < BOARD_SIZE; i++) {
         result.push([i, i]);
@@ -85,7 +89,7 @@ class Piece {
         }    }
     getKingMoves(){
         let result = [];
-        for (let row = 0; row <= 2; row++){
+        for (let row = 0; row <= 2; row++){ //should work
             for (let col = 0; col <= 2; col++){
                 if (row !== 0 || col !== 0) {
                     result.push([row, col])
@@ -95,48 +99,72 @@ class Piece {
 
     }
     getQueenMoves(){
-        // diffrent mvmnt for black
+        //need to add logic
         return[[1, 0]];
     }
   }
-
+  
+  class BoardData {
+    constructor(pieces) {
+      this.pieces = pieces;
+    }
+  
+ 
+    // getPiece(row, col) { not in use now, gets location
+        // }
+  
+    
+  }
+  
   function getInitialBoard() { //need to not use double statments
     let result = [];
-    result.push(new Piece(0, 0, ROOK, WHITE_TYPE))
-    result.push(new Piece(0, 1, KNIGHT, WHITE_TYPE))
-    result.push(new Piece(0, 2, BISHOP, WHITE_TYPE))
-    result.push(new Piece(0, 3, KING, WHITE_TYPE))
-    result.push(new Piece(0, 4, QUEEN, WHITE_TYPE))
-    result.push(new Piece(0, 5, BISHOP, WHITE_TYPE))
-    result.push(new Piece(0, 6, KNIGHT, WHITE_TYPE))
-    result.push(new Piece(0, 7, ROOK, WHITE_TYPE))
-    result.push(new Piece(7, 0, ROOK, DARK_TYPE))
-    result.push(new Piece(7, 1, KNIGHT, DARK_TYPE))
-    result.push(new Piece(7, 2, BISHOP, DARK_TYPE))
-    result.push(new Piece(7, 4, QUEEN, DARK_TYPE))
-    result.push(new Piece(7, 3, KING, DARK_TYPE))
-    result.push(new Piece(7, 5, BISHOP, DARK_TYPE))
-    result.push(new Piece(7, 6, KNIGHT, DARK_TYPE))
-    result.push(new Piece(7, 7, ROOK, DARK_TYPE))
-    for (let k = 0; k < BOARD_SIZE; k++){
-        result.push(new Piece(1, k, "pawn", WHITE_TYPE));
-        result.push(new Piece(6, k, "pawn", DARK_TYPE));
-}
 
-
+    coolPieces(result, 0, WHITE_PLAYER);
+    coolPieces(result, 7, BLACK_PLAYER);
+  
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      result.push(new Piece(1, i, PAWN, WHITE_PLAYER));
+      result.push(new Piece(6, i, PAWN, BLACK_PLAYER));
+    }
     return result;
-  }
+}
+    function coolPieces(result, row, player) {
+        result.push(new Piece(row, 0, ROOK, player));
+        result.push(new Piece(row, 1, KNIGHT, player));
+        result.push(new Piece(row, 2, BISHOP, player));
+        result.push(new Piece(row, 3, KING, player));
+        result.push(new Piece(row, 4, QUEEN, player));
+        result.push(new Piece(row, 5, BISHOP, player));
+        result.push(new Piece(row, 6, KNIGHT, player));
+        result.push(new Piece(row, 7, ROOK, player));
+      }
+  
 
-function addImage(cell, type, name) {
+function addImage(cell, player, name) {
   const image = document.createElement('img');
-  image.src =  type + '/' + name + '.png'; //dependes on saved location
+  image.src =  player + '/' + name + '.png'; //dependes on saved location
   cell.appendChild(image);
 }
 //colors cell
 function onCellClick(event, row, col) {
-    
+    console.log('row', row);
+    console.log('col', col);
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        table1.rows[i].cells[j].classList.remove('possible-move');
+      }
+    }
+    const piece = boardData.getPiece(row, col);
+    if (piece !== undefined) {
+      let possibleMoves = piece.getPossibleMoves();
+      for (let possibleMove of possibleMoves) {
+        const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
+        cell.classList.add('possible-move');
+      }
+    }
 
-    if (selectedCell !== undefined) { //need to fix this, makes the green color not visable
+    if (selectedCell !== undefined) {
+        //need to fix this^, makes the green color not visable
       selectedCell.classList.remove('selected');
     }
     selectedCell = event.currentTarget;
@@ -170,7 +198,7 @@ function createChessBoard() {
   }
 
     pieces = getInitialBoard();
-    // console.log(pieces) //test
+    console.log(pieces) //test
     // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
 
 
