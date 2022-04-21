@@ -12,8 +12,8 @@ table {
 body {
     display: flex; justify-content: center; align-items: center; height: 80vh;
 }
-
-td:active {background-color: rgba(39, 218, 92, 0.8);} 
+/* 
+td:active {background-color: rgba(39, 218, 92, 0.8);}  */
 /* this ^ line does the coloring, the rest do nothing, need to fix */
 
 

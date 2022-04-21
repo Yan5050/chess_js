@@ -1,5 +1,4 @@
 const BOARD_SIZE = 8;
-
 const WHITE_PLAYER = 'white';
 const BLACK_PLAYER = 'black';
 
@@ -16,7 +15,9 @@ const KNIGHT = 'knight';
 let selectedCell;
 let selectedPiece;
 let pieces = [];
-let boardData; //still not used
+
+
+// let boardData; //still not used
 const table = document.createElement('table');
 
 
@@ -74,11 +75,12 @@ class Piece {
             result.push([0, i]);
             result.push([0, -i]);
         }
+        return result;
     }
     getKnightMoves() {
         let result = [];
-        result.push([1, 2][-1, 2][1, -2][-1, -2][2, 1][2, -1][-2, 1][-2, -1])
-        return result
+        result.push([1, 2][-1, 2][1, -2][-1, -2][2, 1][2, -1][-2, 1][-2, -1]);
+        return result;
     }
 
 
@@ -89,6 +91,7 @@ class Piece {
             result.push([i, i]);
             result.push([-i, -i]);
         }
+        return result;
     }
     getKingMoves() {
         let result = [];
@@ -133,14 +136,19 @@ class BoardData {
 
     getPiece(row, col) {
         for (let i = 0; i < this.pieces.length; i++) {
-            if(this.pieces[i].row == row && this.pieces[i].col == col) {
-                return this.pieces[i];
+            if (this.pieces[i] !== undefined) {
+                if (this.pieces[i].row == row && this.pieces[i].col == col) {
+                    return this.pieces[i];
+
+                }
+
             }
         }
     }
 }
 
-function getInitialBoard() {
+ function getInitialBoard() {
+     
     let result = [];
 
     specialPieces(result, 0, WHITE_PLAYER); //changed to special
@@ -170,15 +178,17 @@ function addImage(cell, player, name) {
     cell.appendChild(image);
 }
 //colors cell
-function onCellClick(event, row, col) {
-    console.log('row', row);
-    console.log('col', col);
+function onCellClick(event, row, col) { //deleted event
+    // console.log('row', row);
+    // console.log('col', col);
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {
             table.rows[i].cells[j].classList.remove('possible-move');
         }
     }
-    const piece = boardData.getpiece(row,col); //make boardData global
+    // const piece = boardData.getpiece(row,col); //make boardData global
+    // let piece = new Piece(0, 2, BISHOP, WHITE_PLAYER);
+    
     if (piece !== undefined) {
         let possibleMoves = piece.getPossibleMoves(); //this is not a piece, it's an html element
         for (let possibleMove of possibleMoves) {
@@ -217,7 +227,8 @@ function createChessBoard() {
                 cell.className = 'black-cell'
                 //   cell.id = "cell-" + i.toString() + "_" + j.toString();
             }
-            cell.addEventListener('click', (event) => onCellClick(event, i, col));
+            cell.addEventListener('click', (event) => onCellClick(event, row, cell));//prob cell, might be col?
+            // bug (cant fix this before classes)
         }
     }
 
