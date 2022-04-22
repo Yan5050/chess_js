@@ -9,7 +9,7 @@ const BISHOP = 'bishop';
 const KING = 'king';
 const QUEEN = 'queen';
 const KNIGHT = 'knight';
-
+const EMPTY = 'empty';
 // first "const" the "let"
 
 let selectedCell;
@@ -149,28 +149,27 @@ class BoardData {
 
  function getInitialBoard() {
      
-    let result = [];
+    let result = pieces;
 
     specialPieces(result, 0, WHITE_PLAYER); //changed to special
     specialPieces(result, 7, BLACK_PLAYER);
 
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        result.push(new Piece(1, i, PAWN, WHITE_PLAYER));
-        result.push(new Piece(6, i, PAWN, BLACK_PLAYER));
+    for (let j = 0; j < BOARD_SIZE; j++) {
+        result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
+        result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
     }
     return result;
 }
 function specialPieces(result, row, player) {
-    result.push(new Piece(row, 0, ROOK, player));
-    result.push(new Piece(row, 1, KNIGHT, player));
-    result.push(new Piece(row, 2, BISHOP, player));
-    result.push(new Piece(row, 3, KING, player));
-    result.push(new Piece(row, 4, QUEEN, player));
-    result.push(new Piece(row, 5, BISHOP, player));
-    result.push(new Piece(row, 6, KNIGHT, player));
-    result.push(new Piece(row, 7, ROOK, player));
+    result[row *  BOARD_SIZE + 0] = (new Piece(row, 0, ROOK, player));
+    result[row *  BOARD_SIZE + 1] = (new Piece(row, 1, KNIGHT, player));
+    result[row *  BOARD_SIZE + 2] = (new Piece(row, 2, BISHOP, player));
+    result[row *  BOARD_SIZE + 3] = (new Piece(row, 3, QUEEN, player));
+    result[row *  BOARD_SIZE + 4] = (new Piece(row, 4, KING, player));
+    result[row *  BOARD_SIZE + 5] = (new Piece(row, 5, BISHOP, player));
+    result[row *  BOARD_SIZE + 6] = (new Piece(row, 6, KNIGHT, player));
+    result[row *  BOARD_SIZE + 7] = (new Piece(row, 7, ROOK, player));
 }
-
 
 function addImage(cell, player, name) {
     const image = document.createElement('img');
@@ -178,32 +177,35 @@ function addImage(cell, player, name) {
     cell.appendChild(image);
 }
 //colors cell
-function onCellClick(event, row, col) { //deleted event
-    // console.log('row', row);
-    // console.log('col', col);
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-            table.rows[i].cells[j].classList.remove('possible-move');
-        }
-    }
-    // const piece = boardData.getpiece(row,col); //make boardData global
-    // let piece = new Piece(0, 2, BISHOP, WHITE_PLAYER);
+function onCellClick(cell) { //deleted event
+    console.log(cell)
+    removeAllHighlights();
+    // // const piece = boardData.getpiece(row,col); //make boardData global
+    // // let piece = new Piece(0, 2, BISHOP, WHITE_PLAYER);
+    // let piece = pieces[cell.id.split(4)]
+    // console.log(piece)
     
-    if (piece !== undefined) {
-        let possibleMoves = piece.getPossibleMoves(); //this is not a piece, it's an html element
-        for (let possibleMove of possibleMoves) {
-            const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
-            cell.classList.add('possible-move');
-        }
-    }
+    // if (piece !== undefined) {
+    //     let possibleMoves = piece.getPossibleMoves(); //this is not a piece, it's an html element
+    //     for (let possibleMove of possibleMoves) {
+    //         const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
+    //         cell.classList.add('possible-move');
+    //     }
+    // }
 
-    if (selectedCell !== undefined) {
-        //need to fix this^, makes the red color not visable
-        selectedCell.classList.remove('selected');
-    }
-    selectedCell = event.currentTarget;
-    selectedCell.classList.add('selected');
+    // if (selectedCell !== undefined) {
+    //     //need to fix this^, makes the red color not visable
+    //     selectedCell.classList.remove('selected');
+    // }
+    // selectedCell = event.currentTarget;
+    // selectedCell.classList.add('selected');
 }
+function removeAllHighlights() {
+    for (let i = 0; i < BOARD_SIZE*BOARD_SIZE; i++) {
+        let cell = document.querySelector("#cell" + i)
+    }
+}
+
 // onPieceClick doesnt work.
 function onPieceClick(event) { //supposed to be used for second kind of marker
     if (selectedPiece !== undefined && selectedPiece !== selectedCell) {
@@ -219,15 +221,18 @@ function createChessBoard() {
 
     for (let i = 0; i < BOARD_SIZE; i++) { //changed to i
         const row = table.insertRow(); //changed to row
-        for (let col = 0; col < BOARD_SIZE; col++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
             const cell = row.insertCell();
-            if ((i + col) % 2 === 0) {
+            cell.id = "cell" + eval(i*BOARD_SIZE + j)
+            if ((i + j) % 2 === 0) {
                 cell.className = 'white-cell';
             } else {
                 cell.className = 'black-cell'
                 //   cell.id = "cell-" + i.toString() + "_" + j.toString();
             }
-            cell.addEventListener('click', (event) => onCellClick(event, row, cell));//prob cell, might be col?
+            pieces.push(new Piece(i, j, EMPTY, EMPTY));
+            // console.log(pieces[i*BOARD_SIZE + j])
+            cell.addEventListener('click', onCellClick(cell.id));//prob cell, might be col?
             // bug (cant fix this before classes)
         }
     }
@@ -238,7 +243,8 @@ function createChessBoard() {
 
 
     for (let piece of pieces) {
-        addImage(table.rows[piece.row].cells[piece.col], piece.player, piece.type);
+        // Only add an image to cells that are not empty.
+        if(piece.type !== 'empty') addImage(table.rows[piece.row].cells[piece.col], piece.player, piece.type);
     }
 }
 
