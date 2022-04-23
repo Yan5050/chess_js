@@ -35,9 +35,6 @@ td:active {background-color: rgba(39, 218, 92, 0.8);}  */
     background-color: black;
   } */
   
-.selected {
-  background: rgba(219, 54, 42, 0.8);
-}
 
 
 .white-cell {
@@ -53,6 +50,10 @@ td:active {background-color: rgba(39, 218, 92, 0.8);}  */
 }
 .selected2 {
   background-color: rgba(223, 40, 16, 0.8);
+}
+
+.selected {
+  background: rgba(119, 231, 91, 0.8);
 }
 
 .possible-move{
