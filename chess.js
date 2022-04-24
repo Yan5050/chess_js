@@ -29,6 +29,13 @@ class Piece {
         this.player = player;
     }
 
+    getOpponentColor() {
+        if (this.player === WHITE_PLAYER) {
+            return BLACK_PLAYER;
+        }
+        return WHITE_PLAYER;
+        
+    }
     getPossibleMoves() {
         let relativeMoves;
         if (this.type === PAWN) {
@@ -43,7 +50,10 @@ class Piece {
             relativeMoves = this.getKingMoves();
         } else if (this.type === QUEEN) {
             relativeMoves = this.getRookMoves();
+        }else {
+            console.log("unkown type", type)
         }
+        
 
 
 
@@ -116,19 +126,45 @@ class Piece {
                 result.push([0, j]);
                 result.push([0, -j]);
             }
+        }
 
 
             result.push
         }
-    }
+    
+
     // breaks code(Unexpected identifier)
     
     
 
 
-}
+// }
+// class BoardData {
+//     constructor(pieces) {
+//       this.pieces = pieces;
+//     }
+  
+//     // Returns piece in row, col, or undefined if not exists.
+//     getPiece(row, col) {
+//       for (const piece of this.pieces) {
+//         if (piece.row === row && piece.col === col) {
+//           return piece;
+//         }
+//       }
+//     }
 
-//yuval code, NEED TO CHECK!!!
+    
+    isEmpty(row, col) {
+        return this.getPiece(row, col) === undefined;
+      }
+    
+      isPlayer(row, col, player) {
+        const piece = this.getPiece(row, col);
+        return piece !== undefined && piece.player === player;
+      }
+    }
+    
+//NEED TO CHECK!!!
 // class BoardData {
 //     constructor(pieces) {
 //       this.pieces = pieces;
@@ -164,8 +200,8 @@ function specialPieces(result, row, player) {
     result[row *  BOARD_SIZE + 0] = (new Piece(row, 0, ROOK, player));
     result[row *  BOARD_SIZE + 1] = (new Piece(row, 1, KNIGHT, player));
     result[row *  BOARD_SIZE + 2] = (new Piece(row, 2, BISHOP, player));
-    result[row *  BOARD_SIZE + 3] = (new Piece(row, 3, QUEEN, player));
-    result[row *  BOARD_SIZE + 4] = (new Piece(row, 4, KING, player));
+    result[row *  BOARD_SIZE + 3] = (new Piece(row, 3, KING, player));
+    result[row *  BOARD_SIZE + 4] = (new Piece(row, 4, QUEEN, player));
     result[row *  BOARD_SIZE + 5] = (new Piece(row, 5, BISHOP, player));
     result[row *  BOARD_SIZE + 6] = (new Piece(row, 6, KNIGHT, player));
     result[row *  BOARD_SIZE + 7] = (new Piece(row, 7, ROOK, player));
@@ -209,8 +245,14 @@ function onCellClick(event) { //deleted event
     //     }
     // }
 
-
-
+    // const piece = boardData.getPiece(row, col);
+    // if (piece !== undefined) {
+    //   let possibleMoves = piece.getPossibleMoves(boardData);
+    //   for (let possibleMove of possibleMoves) {
+    //     const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
+    //     cell.classList.add('possible-move');
+    //   }
+    // }
 function removePreSelected() {
     if (selectedCell !== undefined) {
         //need to fix this^, makes the red color not visable
@@ -255,7 +297,7 @@ function createChessBoard() {
             // bug (cant fix this before classes)
         }
     }
-
+    // boardData = new BoardData(getInitialBoard());
     pieces = getInitialBoard();
     console.log(pieces) //test
     // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
