@@ -1,61 +1,61 @@
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 
-  }
-  
-  td, tr {
-    border: 1px solid #999;
-    padding: 1rem;
-    text-align: left;
-  }
+}
+
+td, tr {
+  border: 1px solid #999;
+  padding: 1rem;
+  text-align: left;
+}
 
 body {
-    display: flex; justify-content: center; align-items: center; height: 80vh;
+  display: flex; justify-content: center; align-items: center; height: 80vh;
 }
 /* 
 td:active {background-color: rgba(39, 218, 92, 0.8);}  */
 /* this ^ line does the coloring, the rest do nothing, need to fix */
 
 
-  /* table tr:nth-child(odd) td:nth-child(even) {
-    background-color: rgba(20, 20, 200, 0.7);
-    z-index: 0;
-  }
-  table tr:nth-child(even) td:nth-child(odd) {
-    background-color: rgba(20, 20, 200, 0.7);
-    z-index: 0;
-  } */
+/* table tr:nth-child(odd) td:nth-child(even) {
+  background-color: rgba(20, 20, 200, 0.7);
+  z-index: 0;
+}
+table tr:nth-child(even) td:nth-child(odd) {
+  background-color: rgba(20, 20, 200, 0.7);
+  z-index: 0;
+} */
 /* 
-  .tagname {
-    background: rgba(39, 218, 92, 0.384);
-  } */
-  /* <tr style="background-color:&#x2654;">...</tr> */
+.tagname {
+  background: rgba(39, 218, 92, 0.384);
+} */
+/* <tr style="background-color:&#x2654;">...</tr> */
 
-  /* #id1_1 {
-    background-color: black;
-  } */
-  
+/* #id1_1 {
+  background-color: black;
+} */
+
 
 
 .white-cell {
-  background: rgba(255, 255, 255, 0.8);
-  width: 45px;
-  height: 45px;
+background: rgba(255, 255, 255, 0.8);
+width: 45px;
+height: 45px;
 }
 
 .black-cell {
-  background: rgba(20, 20, 200, 0.7);
-  width: 45px;
-  height: 45px;
+background: rgba(20, 20, 200, 0.7);
+width: 45px;
+height: 45px;
 }
 .selected2 {
-  background-color: rgba(223, 40, 16, 0.8);
+background-color: rgba(223, 40, 16, 0.8);
 }
 
 .selected {
-  background: rgba(119, 231, 91, 0.8);
+background: rgba(119, 231, 91, 0.8);
 }
 
 .possible-move{
-  background: rgba(231, 177, 61, 0.7);
+background: rgba(231, 177, 61, 0.7);
 }
