@@ -13,9 +13,7 @@ const EMPTY = 'empty';
 let selectedCell;
 let selectedPiece;
 let pieces = [];
-
-
-// let boardData; //still not used
+let boardData; //still not used
 const table = document.createElement('table');
 
 
@@ -82,14 +80,15 @@ class Piece {
             result.push([-i, 0]);
             result.push([0, i]);
             result.push([0, -i]);
+            
         }
         return result;
     }
-    // getKnightMoves() {
-    //     let result = [];
-    //     result.push([1, 2][-1, 2][1, -2][-1, -2][2, 1][2, -1][-2, 1][-2, -1]);
-    //     return result;
-    // }
+    getKnightMoves() {
+        let result = [];
+        result.push([1, 2][-1, 2][1, -2][-1, -2][2, 1][2, -1][-2, 1][-2, -1]);
+        return result; //?
+    }
 
 
     getBishopMoves() {
@@ -101,17 +100,19 @@ class Piece {
         }
         return result;
     }
-    // getKingMoves() {
-    //     let result = [];
-    //     for (let row = 0; row <= 2; row++) { //should work
-    //         for (let col = 0; col <= 2; col++) {
-    //             if (row !== 0 || col !== 0) {
-    //                 result.push([row, col])
-    //             }
-    //         }
-    //     }
 
-    // }
+    getKingMoves() {
+        let result = [];
+        for (let row = 0; row <= 2; row++) { //should work
+            for (let col = 0; col <= 2; col++) {
+                if (row !== 0 || col !== 0) {
+                    result.push([row, col])
+                }
+            }
+        }
+        return result
+    }
+
     getQueenMoves() {
         let result = [];
         for (let i = 1; i < BOARD_SIZE; i++) { //bishop logic
@@ -147,20 +148,16 @@ class Piece {
     }
 }
 
-
-
-
 function getInitialBoard() {
-
     let result = pieces;
 
     specialPieces(result, 0, WHITE_PLAYER); //changed to special
     specialPieces(result, 7, BLACK_PLAYER);
 
-    for (let j = 0; j < BOARD_SIZE; j++) {
-        result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
-        result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
-    }
+    // for (let j = 0; j < BOARD_SIZE; j++) {
+    //     result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
+    //     result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
+    // }
     return result;
 }
 function specialPieces(result, row, player) {
@@ -181,6 +178,7 @@ function addImage(cell, player, name) {
 }
 //remove all previous selected and highlighted cells, and then adds them according to the new click 
 function onCellClick(event) { //deleted event
+    returnsPieceType(event)
     removePreSelected();
     removeAllHighlights();
     selectedCell = event.currentTarget;
@@ -188,12 +186,28 @@ function onCellClick(event) { //deleted event
     let piece = pieces[selectedCell.id.slice(4)]
     console.log(piece)
     selectedCell.classList.add('selected');
-    console.log(selectedCell)
-    console.log(piece.type)
+    // console.log(selectedCell)
+    // console.log(piece.type)
+    // coloringPossibleMoves();
 }
-// if (piece.type !== EMPTY){
-//     pieceMoves = event.currentTarget;
-//     let temp = piece.getPossibleMoves();
+
+function returnsPieceType(event) {
+    console.log(pieces.type)
+}
+
+// function coloringPossibleMoves() {
+//     console.log(pieces, selectedCell)
+//     addEventListener('click', (event) => { returnsPieceType(event) });
+//     if (selectedCell !== "empty") {
+        // console.log("it workes");
+        // selectedCell.classList.add('possible-move');
+//     }
+// }
+    // playerTypeWhite = this.WHITE_PLAYER
+    // playerTypeBlack = this.BLACK_PLAYER
+
+    // pieceMoves = event.currentTarget;
+    // let temp = piece.getPossibleMoves();
 //     for (let newTemp of temp)
 //     pieceMoves.classList.add('possible-move');
 
@@ -233,7 +247,7 @@ function createChessBoard() {
     }
     // boardData = new BoardData(getInitialBoard());
     pieces = getInitialBoard();
-    console.log(pieces) //test
+    // console.log(pieces) //test
     // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
 
 
