@@ -45,7 +45,7 @@ class Piece {
         } else if (this.type === KING) {
             relativeMoves = this.getKingMoves();
         } else if (this.type === QUEEN) {
-            relativeMoves = this.getRookMoves();
+            relativeMoves = this.getQueenMoves();
         } else {
             console.log("unkown type", type)
         }
@@ -60,18 +60,21 @@ class Piece {
         let filteredMoves = [];
         for (let absoluteMove of absoluteMoves) {
             if (absoluteMove[0] >= 0 && absoluteMove[0] <= 7 && absoluteMove[1] >= 0 && absoluteMove[1] <= 7) {
-                filteredMoves.push(absoluteMove);
-                return filteredMoves;
+                filteredMoves.push(absoluteMove)
             }
         }
         //make bounds, filter moves out of bound
+        return filteredMoves;
 
 
     }
     getPawnMoves() {
-        // need to add logic
+        if (this.getOpponentColor() !== WHITE_PLAYER){
         return [[1, 0]];
+    }else{
+        return [[-1, 0]];
     }
+}    
 
     getRookMoves() {
         let result = [];
@@ -86,7 +89,7 @@ class Piece {
     }
     getKnightMoves() {
         let result = [];
-        result.push([1, 2][-1, 2][1, -2][-1, -2][2, 1][2, -1][-2, 1][-2, -1]);
+        result.push([1, 2],[-1, 2],[1, -2],[-1, -2],[2, 1],[2, -1],[-2, 1],[-2, -1]);
         return result; //?
     }
 
@@ -96,6 +99,8 @@ class Piece {
         let result = [];
         for (let i = 1; i < BOARD_SIZE; i++) {
             result.push([i, i]);
+            result.push([i, -i]);
+            result.push([-i, i]);
             result.push([-i, -i]);
         }
         return result;
@@ -103,8 +108,8 @@ class Piece {
 
     getKingMoves() {
         let result = [];
-        for (let row = 0; row <= 2; row++) { //should work
-            for (let col = 0; col <= 2; col++) {
+        for (let row = -1; row <= 1; row++) { //should work
+            for (let col = -1; col <= 1; col++) {
                 if (row !== 0 || col !== 0) {
                     result.push([row, col])
                 }
@@ -117,8 +122,9 @@ class Piece {
         let result = [];
         for (let i = 1; i < BOARD_SIZE; i++) { //bishop logic
             result.push([i, i]);
+            result.push([i, -i]);
+            result.push([-i, i]);
             result.push([-i, -i]);
-            let result = [];
             for (let j = 1; j < BOARD_SIZE; j++) { //rook logic
                 result.push([j, 0]);
                 result.push([-j, 0]);
@@ -126,9 +132,7 @@ class Piece {
                 result.push([0, -j]);
             }
         }
-
-
-        result.push
+        return result
     }
 
 
@@ -154,10 +158,10 @@ function getInitialBoard() {
     specialPieces(result, 0, WHITE_PLAYER); //changed to special
     specialPieces(result, 7, BLACK_PLAYER);
 
-    // for (let j = 0; j < BOARD_SIZE; j++) {
-    //     result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
-    //     result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
-    // }
+    for (let j = 0; j < BOARD_SIZE; j++) {
+        result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
+        result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
+    }
     return result;
 }
 function specialPieces(result, row, player) {
@@ -178,23 +182,49 @@ function addImage(cell, player, name) {
 }
 //remove all previous selected and highlighted cells, and then adds them according to the new click 
 function onCellClick(event) { //deleted event
-    returnsPieceType(event)
     removePreSelected();
     removeAllHighlights();
     selectedCell = event.currentTarget;
-    // console.log(selectedCell)
     let piece = pieces[selectedCell.id.slice(4)]
+    returnsPieceType()
+    if (returnsPieceType() !== EMPTY) {
+        console.log(piece.getPossibleMoves())
+        coloringBlocks = piece.getPossibleMoves()
+       
+        coloringPossibleMoves(convertXY(coloringBlocks))
+        
+
+
+        // possible-move
+    }
+
+
+
+    // console.log(selectedCell)
+
     console.log(piece)
     selectedCell.classList.add('selected');
     // console.log(selectedCell)
     // console.log(piece.type)
     // coloringPossibleMoves();
 }
-
-function returnsPieceType(event) {
-    console.log(pieces.type)
+function convertXY(cords) {
+    let tablez = []
+    for (let i = 0; i < cords.length; i++) {
+        tablez.push(table.rows[cords[i][0]].cells[cords[i][1]])
+    }
+    return tablez
 }
 
+function returnsPieceType() {
+    return pieces[selectedCell.id.slice(4)].type;
+}
+function coloringPossibleMoves(htmlCells){
+    for (let i = 0; i < htmlCells.length; i++) {
+        htmlCells[i].classList.add('possible-move');
+    }
+
+}
 // function coloringPossibleMoves() {
 //     console.log(pieces, selectedCell)
 //     addEventListener('click', (event) => { returnsPieceType(event) });
@@ -222,6 +252,7 @@ function removePreSelected() {
 function removeAllHighlights() {
     for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
         let cell = document.querySelector("#cell" + i)
+        cell.classList.remove('possible-move')
     }
 }
 
