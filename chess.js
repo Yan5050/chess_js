@@ -138,7 +138,6 @@ class Piece {
         return result
     }
     getPawnMoves() {
-<<<<<<< HEAD
         result = []
         if (this.getOpponentColor() !== WHITE_PLAYER) {
             result = this.getMovesInDirection('forward', 'none', 2)
@@ -158,93 +157,10 @@ class Piece {
         return result
     }
 
-=======
-        if (this.getOpponentColor() !== WHITE_PLAYER) {
-            return [[1, 0]];
-        } else {
-            return [[-1, 0]];
-        }
-    }
-//     getPawnMoves() {
-//     if (this.getOpponentColor() !== WHITE_PLAYER) {
-//         result = getMovesInDirection('forward', 'none')
-//         return result
-//     } else {
-//         result = getMovesInDirection('backwards', 'none')
-//         return result
-//     }
-// }
-    getMovesInDirection(rowDir, colDir, range) {
-        let result = [];
-        // console.log("row: " + rowDir + ", column: " + colDir)
-        for (let i = 1; i < range; i++) {
-            let row = this.row
-            let col = this.col
-            if (rowDir === 'forward') {
-                row += i
-            }
-            else if (rowDir === 'backwards') {
-                row += i * (-1)
-            }
-            if (colDir === 'forward') {
-                col += i
-            }
-            else if (colDir === 'backwards') {
-                col += i * (-1)
-            }
-            else if (rowDir === 'double-forward') {
-                row += i * (2)
-            }
-            else if (rowDir === 'double-backwards') {
-                row += i * (-2)
-            }
-            else if (colDir === 'double-forward') {
-                col += i * (2)
-            }
-            else if (colDir === 'double-backwards') {
-                col += i * (-2)
-            }
-            if (row < 0 || row > 7 || col < 0 || col > 7) {
-                // console.log("Out of bounds")
-                break;
-            }
-            let move = [row, col]
-
-            if (boardData.getPiece(move[0], move[1]).type === EMPTY){
-                // console.log(row, col, move)
-                result.push([row, col]);
-                // console.log("I just pushed")
-            }
-            // Enter if the cell is opponent's color
-            else if(boardData.getPiece(move[0], move[1]).player === this.getOpponentColor()){
-                // console.log(row, col, move)
-                result.push([row, col]);
-                break;
-                
-            }
-            // Enter if the cell is an ally color
-            else{
-                break;
-            }
-        }
-        return result
-    }
-
-    getRookMoves() {
-        let result = []
-        result = this.getMovesInDirection('backwards', 'none', 8).concat(this.getMovesInDirection('none', 'forward', 8)).concat(this.getMovesInDirection('forward', 'none', 8)).concat(this.getMovesInDirection('none', 'backwards', 8))
-        // console.log(result)
-
-
-        return result
-    }
-
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
     getKnightMoves() {
         let row;
         let col;
         let result = [];
-<<<<<<< HEAD
         let horseMoves = [[2, 1], [-2, 1], [2, -1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]];
         for (let move of horseMoves) { //horse is a place holder
             row = this.row;
@@ -264,11 +180,6 @@ class Piece {
         // result = this.getMovesInDirection('forward', 'none', 2).concat(this.getMovesInDirection('forward', 'forward', 2)).concat(this.getMovesInDirection('forward', 'backwards', 2)).concat(this.getMovesInDirection('none', 'forward', 2)).concat(this.getMovesInDirection('none', 'backwards', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'none', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'backwards', 2))
         // result =this.getMovesInDirection('double-forward', 'backwards', 2).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'double-backwards', 2)).concat(this.getMovesInDirection('backwards', 'double-forward', 2))
         // console.log(result) 
-=======
-        result =this.getMovesInDirection('double-forward', 'backwards', 2).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'double-backwards', 2)).concat(this.getMovesInDirection('backwards', 'double-forward', 2))
-        console.log(result)
-        return result; 
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
     }
 
 
@@ -281,10 +192,7 @@ class Piece {
     getKingMoves() {
         let result = [];
         result = this.getMovesInDirection('forward', 'none', 2).concat(this.getMovesInDirection('forward', 'forward', 2)).concat(this.getMovesInDirection('forward', 'backwards', 2)).concat(this.getMovesInDirection('none', 'forward', 2)).concat(this.getMovesInDirection('none', 'backwards', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'none', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'backwards', 2))
-<<<<<<< HEAD
         console.log(result)
-=======
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
         return result
     }
 
@@ -338,13 +246,8 @@ function getInitialBoard() {
     restOfThePieces(result);
 
     for (let j = 0; j < BOARD_SIZE; j++) {
-<<<<<<< HEAD
         result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
         result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
-=======
-        result[1 * BOARD_SIZE + j] = (new Piece(1, j, EMPTY, WHITE_PLAYER));
-        result[6 * BOARD_SIZE + j] = (new Piece(6, j, EMPTY, BLACK_PLAYER));
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
     }
     return result;
 }
@@ -374,11 +277,7 @@ function addImage(cell, player, name) {
     cell.appendChild(image);
 }
 //remove all previous selected and highlighted cells, and then adds them according to the new click 
-<<<<<<< HEAD
 function onCellClick(event) {
-=======
-function onCellClick(event) { 
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
     removePreSelected();
     removeAllHighlights();
     selectedCell = event.currentTarget;
@@ -389,7 +288,6 @@ function onCellClick(event) {
         coloringBlocks = piece.getPossibleMoves()
         coloringPossibleMoves(convertXY(coloringBlocks))
         selectedCell.classList.add('selected');
-<<<<<<< HEAD
         const pieceBoard = boardData.getPiece();
 
     }
@@ -401,16 +299,6 @@ function convertXY(cords) {
         if (cords === undefined); {
 
         }
-=======
-        const pieceBoard = boardData.getPiece(); 
-
-    }
-
-}
-function convertXY(cords) {
-    let tablez = []
-    for (let i = 0; i < cords.length; i++) {
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
         tablez.push(table.rows[cords[i][0]].cells[cords[i][1]])
     }
     return tablez
@@ -451,13 +339,8 @@ function createChessBoard() {
     //     table.remove();
     //   }
     document.body.appendChild(table);
-<<<<<<< HEAD
     for (let i = 0; i < BOARD_SIZE; i++) {
         const row = table.insertRow();
-=======
-    for (let i = 0; i < BOARD_SIZE; i++) { 
-        const row = table.insertRow(); 
->>>>>>> b30097d63753eff4ff1aa69c5ad609fba9c3f20e
         for (let j = 0; j < BOARD_SIZE; j++) {
             const cell = row.insertCell();
             cell.id = "cell" + eval(i * BOARD_SIZE + j)
