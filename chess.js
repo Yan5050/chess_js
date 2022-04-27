@@ -31,7 +31,7 @@ class Piece {
             return BLACK_PLAYER;
         }
         return WHITE_PLAYER;
-
+        //test
     }
     getPossibleMoves() {
         let relativeMoves;
