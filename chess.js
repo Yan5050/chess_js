@@ -54,18 +54,18 @@ class Piece {
 
 
 
-        let absoluteMoves = [];
-        for (let relativeMove of relativeMoves) {
-            absoluteMoves.push([relativeMove[0] + this.row, relativeMove[1] + this.col]);
-        }
-        let filteredMoves = [];
-        for (let absoluteMove of absoluteMoves) {
-            if (absoluteMove[0] >= 0 && absoluteMove[0] <= 7 && absoluteMove[1] >= 0 && absoluteMove[1] <= 7) {
-                filteredMoves.push(absoluteMove)
-            }
-        }
+        // let absoluteMoves = [];
+        // for (let relativeMove of relativeMoves) {
+        //     absoluteMoves.push([relativeMove[0] + this.row, relativeMove[1] + this.col]);
+        // }
+        // let filteredMoves = [];
+        // for (let absoluteMove of absoluteMoves) {
+        //     if (absoluteMove[0] >= 0 && absoluteMove[0] <= 7 && absoluteMove[1] >= 0 && absoluteMove[1] <= 7) {
+        //         filteredMoves.push(absoluteMove)
+        //     }
+        // }
         //make bounds, filter moves out of bound
-        return filteredMoves;
+        return relativeMoves;
 
 
     }
@@ -76,114 +76,102 @@ class Piece {
             return [[-1, 0]];
         }
     }
-
-    getRookMoves() {
-        // console.log(boardData)
+//     getPawnMoves() {
+//     if (this.getOpponentColor() !== WHITE_PLAYER) {
+//         result = getMovesInDirection('forward', 'none')
+//         return result
+//     } else {
+//         result = getMovesInDirection('backwards', 'none')
+//         return result
+//     }
+// }
+    getMovesInDirection(rowDir, colDir, range) {
         let result = [];
-        for (let i = 1; i < BOARD_SIZE; i++) {
-            let move = [i, 0]
-            // console.log(boardData.getPiece(move[0], move[1]))
-            if (boardData.getPiece(move[0], move[1]).type !== EMPTY){
-                break
+        // console.log("row: " + rowDir + ", column: " + colDir)
+        for (let i = 1; i < range; i++) {
+            let row = this.row
+            let col = this.col
+            if (rowDir === 'forward') {
+                row += i
             }
+            else if (rowDir === 'backwards') {
+                row += i * (-1)
+            }
+            if (colDir === 'forward') {
+                col += i
+            }
+            else if (colDir === 'backwards') {
+                col += i * (-1)
+            }
+            else if (rowDir === 'double-forward') {
+                row += i * (2)
+            }
+            else if (rowDir === 'double-backwards') {
+                row += i * (-2)
+            }
+            else if (colDir === 'double-forward') {
+                col += i * (2)
+            }
+            else if (colDir === 'double-backwards') {
+                col += i * (-2)
+            }
+            if (row < 0 || row > 7 || col < 0 || col > 7) {
+                // console.log("Out of bounds")
+                break;
+            }
+            let move = [row, col]
+
+            if (boardData.getPiece(move[0], move[1]).type === EMPTY){
+                // console.log(row, col, move)
+                result.push([row, col]);
+                // console.log("I just pushed")
+            }
+            // Enter if the cell is opponent's color
+            else if(boardData.getPiece(move[0], move[1]).player === this.getOpponentColor()){
+                // console.log(row, col, move)
+                result.push([row, col]);
+                break;
+                
+            }
+            // Enter if the cell is an ally color
             else{
-                result.push([i, 0]);
-            }
-        
-
-        // for (let j = 1; j < BOARD_SIZE; j++) {
-        //     let move = [0, j]
-        //     // console.log(boardData.getPiece(move[0], move[1]))
-        //     if (boardData.getPiece(move[0], move[1]).type !== EMPTY){
-        //         break
-        //     }
-        //     else{
-        //         result.push([0, j]);
-        //     }
-        // }
-
-            
-        // for (let k = 1; k < BOARD_SIZE; k++) {
-        //     let move = [-k, 0]
-        //     console.log(boardData.getPiece(move[0], move[1]))
-        //     if (boardData.getPiece(move[0], move[1]).type !== undefined || boardData.getPiece(move[0], move[1]).type !== EMPTY){
-        //         break
-        //     }
-        //     else{
-        //         result.push([-k, 0]);
-        //     }
-        // }
-
-
-            
-        // for (let n = 1; n < BOARD_SIZE; n++) {
-        //     let move = [0, -n]
-        //     console.log(boardData.getPiece(move[0], move[1]))
-        //     if (boardData.getPiece(move[0], move[1]).type !== EMPTY){
-        //         break
-        //     }
-        //     else{
-        //         result.push([0, -n]);
-        //     }
-        // }
-
-
-
-
-
-            // result.push([-i, 0]);
-            // result.push([0, i]);
-            // result.push([0, -i]);
-
-    }
-        return result;
-    }
-
-    getKnightMoves() {
-        let result = [];
-        result.push([1, 2], [-1, 2], [1, -2], [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]);
-        return result; //?
-    }
-
-
-    getBishopMoves() {
-        //need to check logic
-        let result = [];
-        for (let i = 1; i < BOARD_SIZE; i++) {
-            result.push([i, i]);
-            result.push([i, -i]);
-            result.push([-i, i]);
-            result.push([-i, -i]);
-        }
-        return result;
-    }
-
-    getKingMoves() {
-        let result = [];
-        for (let row = -1; row <= 1; row++) { //should work
-            for (let col = -1; col <= 1; col++) {
-                if (row !== 0 || col !== 0) {
-                    result.push([row, col])
-                }
+                break;
             }
         }
         return result
     }
 
-    getQueenMoves() {
+    getRookMoves() {
+        let result = []
+        result = this.getMovesInDirection('backwards', 'none', 8).concat(this.getMovesInDirection('none', 'forward', 8)).concat(this.getMovesInDirection('forward', 'none', 8)).concat(this.getMovesInDirection('none', 'backwards', 8))
+        // console.log(result)
+
+
+        return result
+    }
+
+    getKnightMoves() {
         let result = [];
-        for (let i = 1; i < BOARD_SIZE; i++) { //bishop logic
-            result.push([i, i]);
-            result.push([i, -i]);
-            result.push([-i, i]);
-            result.push([-i, -i]);
-            for (let j = 1; j < BOARD_SIZE; j++) { //rook logic
-                result.push([j, 0]);
-                result.push([-j, 0]);
-                result.push([0, j]);
-                result.push([0, -j]);
-            }
-        }
+        result =this.getMovesInDirection('double-forward', 'backwards', 2).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'forward', 2)).concat(this.getMovesInDirection('double-backwards', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'backwards', 2)).concat(this.getMovesInDirection('double-forward', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'double-backwards', 2)).concat(this.getMovesInDirection('backwards', 'double-forward', 2))
+        console.log(result)
+        return result; 
+    }
+
+
+    getBishopMoves() {
+        let result = [];
+        result = this.getMovesInDirection('forward', 'forward', 8).concat(this.getMovesInDirection('backwards', 'backwards', 8)).concat(this.getMovesInDirection('forward', 'backwards', 8)).concat(this.getMovesInDirection('backwards', 'forward', 8))
+        // console.log(result)
+        return result;
+    }
+    getKingMoves() {
+        let result = [];
+        result = this.getMovesInDirection('forward', 'none', 2).concat(this.getMovesInDirection('forward', 'forward', 2)).concat(this.getMovesInDirection('forward', 'backwards', 2)).concat(this.getMovesInDirection('none', 'forward', 2)).concat(this.getMovesInDirection('none', 'backwards', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'none', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'backwards', 2))
+        return result
+    }
+
+    getQueenMoves() {
+        let result = this.getBishopMoves().concat(this.getRookMoves())
         return result
     }
 }
@@ -232,8 +220,8 @@ function getInitialBoard() {
     restOfThePieces(result);
 
     for (let j = 0; j < BOARD_SIZE; j++) {
-        result[1 * BOARD_SIZE + j] = (new Piece(1, j, PAWN, WHITE_PLAYER));
-        result[6 * BOARD_SIZE + j] = (new Piece(6, j, PAWN, BLACK_PLAYER));
+        result[1 * BOARD_SIZE + j] = (new Piece(1, j, EMPTY, WHITE_PLAYER));
+        result[6 * BOARD_SIZE + j] = (new Piece(6, j, EMPTY, BLACK_PLAYER));
     }
     return result;
 }
@@ -250,7 +238,7 @@ function specialPieces(result, row, player) {
 function restOfThePieces(result) {
     for (let i = 2; i < 6; i++) {
         for (let j = 0; j < 8; j++) {
-            result[i * BOARD_SIZE + j] = new Piece(i, j, EMPTY, WHITE_PLAYER)
+            result[i * BOARD_SIZE + j] = new Piece(i, j, EMPTY, EMPTY)
 
         }
     }
@@ -263,7 +251,7 @@ function addImage(cell, player, name) {
     cell.appendChild(image);
 }
 //remove all previous selected and highlighted cells, and then adds them according to the new click 
-function onCellClick(event) { //deleted event
+function onCellClick(event) { 
     removePreSelected();
     removeAllHighlights();
     selectedCell = event.currentTarget;
@@ -274,28 +262,10 @@ function onCellClick(event) { //deleted event
         coloringBlocks = piece.getPossibleMoves()
         coloringPossibleMoves(convertXY(coloringBlocks))
         selectedCell.classList.add('selected');
-        const pieceBoard = boardData.getPiece(); //maybe to delete "row, col"
-        // if (pieceBoard !== undefined) { // not used(?)
-        //   let possibleMoves = pieceBoard.getPossibleMoves();
-        //   for (let possibleMove of possibleMoves) {
-        //     const cell = table.rows[possibleMove[0]].cells[possibleMove[1]];
-        //     cell.classList.add('possible-move');
-        //   }
-        // }
+        const pieceBoard = boardData.getPiece(); 
 
-
-        // possible-move
     }
 
-
-
-    // console.log(selectedCell)
-
-    // console.log(piece)
-
-    // console.log(selectedCell)
-    // console.log(piece.type)
-    // coloringPossibleMoves();
 }
 function convertXY(cords) {
     let tablez = []
@@ -312,27 +282,9 @@ function coloringPossibleMoves(htmlCells) {
     for (let i = 0; i < htmlCells.length; i++) {
         htmlCells[i].classList.add('possible-move');
     }
-
 }
-// function coloringPossibleMoves() {
-//     console.log(pieces, selectedCell)
-//     addEventListener('click', (event) => { returnsPieceType(event) });
-//     if (selectedCell !== "empty") {
-// console.log("it workes");
-// selectedCell.classList.add('possible-move');
-//     }
-// }
-// playerTypeWhite = this.WHITE_PLAYER
-// playerTypeBlack = this.BLACK_PLAYER
-
-// pieceMoves = event.currentTarget;
-// let temp = piece.getPossibleMoves();
-//     for (let newTemp of temp)
-//     pieceMoves.classList.add('possible-move');
-
 function removePreSelected() {
     if (selectedCell !== undefined) {
-        //need to fix this^, makes the red color not visable
         selectedCell.classList.remove('selected');
         selectedCell = undefined
     }
@@ -345,7 +297,7 @@ function removeAllHighlights() {
     }
 }
 function initGame() {
-    // Create list of pieces (32 total)
+    // Create list of pieces (64 total)
     boardData = new BoardData(getInitialBoard());
     console.log(boardData)
     createChessBoard(boardData);
@@ -358,8 +310,8 @@ function createChessBoard() {
     //     table.remove();
     //   }
     document.body.appendChild(table);
-    for (let i = 0; i < BOARD_SIZE; i++) { //changed to i
-        const row = table.insertRow(); //changed to row
+    for (let i = 0; i < BOARD_SIZE; i++) { 
+        const row = table.insertRow(); 
         for (let j = 0; j < BOARD_SIZE; j++) {
             const cell = row.insertCell();
             cell.id = "cell" + eval(i * BOARD_SIZE + j)
@@ -369,15 +321,11 @@ function createChessBoard() {
                 cell.className = 'black-cell'
                 //   cell.id = "cell-" + i.toString() + "_" + j.toString();
             }
-            // pieces.push(new Piece(i, j, EMPTY, EMPTY));
-            // console.log(pieces[i*BOARD_SIZE + j])
-            cell.addEventListener('click', (event) => { onCellClick(event) });//prob cell, might be col?
-            // bug (cant fix this before classes)
+            cell.addEventListener('click', (event) => { onCellClick(event) });
         }
     }
     boardData = new BoardData(getInitialBoard());
     pieces = getInitialBoard();
-    // console.log(pieces) //test
     // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
 
 
@@ -389,4 +337,3 @@ function createChessBoard() {
 }
 
 window.addEventListener('load', initGame);
-// console.log(boardData)
