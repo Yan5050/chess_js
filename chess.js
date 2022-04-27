@@ -118,9 +118,9 @@ class Piece {
             result = this.getMovesInDirection('forward', 'none', 2)
             return result;
         }
-        // if (boardData.isPlayer()){
-        //     console.log(piece)
-        // }
+        if (boardData.isPlayer()){
+            console.log(piece)
+        }
         // if (){   ///this will be the logic for moving to the side while "eating"
         //     result = this.getMovesInDirection('forward', 'backwards', 2).concat(this.getMovesInDirection('forward', 'forward', 2))
 
