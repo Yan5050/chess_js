@@ -92,14 +92,30 @@ class Piece {
         return result
     }
     getPawnMoves() {
+        let row;
+        let col;
+        row = this.row;
+        col = this.col;
         let result = []
-        if (this.getOpponentColor() !== WHITE_PLAYER) {
+        //this will be used for double-first move (2 tiles) for pawns
+        let holdPawnRow = boardData.getPiece(row, col).row
+        if (holdPawnRow == 1){
+            result = this.getMovesInDirection('forward', 'none', 3)
+            console.log(result)
+            return result;
+        }
+        if (holdPawnRow == 6){
+            result = this.getMovesInDirection('backwards', 'none', 3)
+            console.log(result)
+            return result;
+        }
+            else if (this.getOpponentColor() !== WHITE_PLAYER) {
             result = this.getMovesInDirection('forward', 'none', 2)
             return result;
         }
-        if (boardData.isPlayer()){
-            console.log(piece)
-        }
+        // if (boardData.isPlayer()){
+        //     console.log(piece)
+        // }
         // if (){   ///this will be the logic for moving to the side while "eating"
         //     result = this.getMovesInDirection('forward', 'backwards', 2).concat(this.getMovesInDirection('forward', 'forward', 2))
 
