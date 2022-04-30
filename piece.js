@@ -30,17 +30,6 @@ class Piece {
             console.log("unkown type", type)
         }
 
-        // let absoluteMoves = [];
-        // for (let relativeMove of relativeMoves) {
-        //     absoluteMoves.push([relativeMove[0] + this.row, relativeMove[1] + this.col]);
-        // }
-        // let filteredMoves = [];
-        // for (let absoluteMove of absoluteMoves) {
-        //     if (absoluteMove[0] >= 0 && absoluteMove[0] <= 7 && absoluteMove[1] >= 0 && absoluteMove[1] <= 7) {
-        //         filteredMoves.push(absoluteMove)
-        //     }
-        // }
-        //make bounds, filter moves out of bound
         return relativeMoves;
 
 
@@ -49,7 +38,6 @@ class Piece {
         let result = [];
         let row;
         let col;
-        // console.log("row: " + rowDir + ", column: " + colDir)
         for (let i = 1; i < range; i++) {
             row = this.row
             col = this.col
@@ -73,9 +61,7 @@ class Piece {
             let move = [row, col];
 
             if (boardData.getPiece(move[0], move[1]).type === EMPTY) {
-                // console.log(row, col, move)
                 result.push([row, col]);
-                // console.log("I just pushed")
             }
             // Enter if the cell is opponent's color
             else if (boardData.getPiece(move[0], move[1]).player === this.getOpponentColor()) {
@@ -140,7 +126,7 @@ class Piece {
         let col;
         let result = [];
         let horseMoves = [[2, 1], [-2, 1], [2, -1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]];
-        for (let move of horseMoves) { //horse is a place holder
+        for (let move of horseMoves) { //"move" is a place holder
             row = this.row;
             col = this.col;
             row = row + move[0];
@@ -161,13 +147,11 @@ class Piece {
     getBishopMoves() {
         let result = [];
         result = this.getMovesInDirection('forward', 'forward', 8).concat(this.getMovesInDirection('backwards', 'backwards', 8)).concat(this.getMovesInDirection('forward', 'backwards', 8)).concat(this.getMovesInDirection('backwards', 'forward', 8))
-        // console.log(result)
         return result;
     }
     getKingMoves() {
         let result = [];
         result = this.getMovesInDirection('forward', 'none', 2).concat(this.getMovesInDirection('forward', 'forward', 2)).concat(this.getMovesInDirection('forward', 'backwards', 2)).concat(this.getMovesInDirection('none', 'forward', 2)).concat(this.getMovesInDirection('none', 'backwards', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'none', 2)).concat(this.getMovesInDirection('backwards', 'forward', 2)).concat(this.getMovesInDirection('backwards', 'backwards', 2))
-        // console.log(result)
         return result
     }
 

@@ -21,8 +21,6 @@ let boardData;
 const table = document.createElement('table');
 
 
-// breaks code(Unexpected identifier)
-
 function getInitialBoard() {
     let result = pieces;
 
@@ -76,7 +74,7 @@ function onCellClick(event) {
         const pieceBoard = boardData.getPiece();
         if (selectedPiece !== undefined && game.tryMove(selectedPiece, row, col)) {
             selectedPiece = undefined;
-            createChessBoard(game.boardData); // if game copies itself, not redeleting this is the problem
+            createChessBoard(game.boardData); // if game copies itself its becuase of this
         // } else {
         //     tryUpdateSelectedPiece(row, col);
           }
@@ -141,18 +139,15 @@ function createChessBoard() {
                 cell.className = 'white-cell';
             } else {
                 cell.className = 'black-cell'
-                //   cell.id = "cell-" + i.toString() + "_" + j.toString();
             }
             cell.addEventListener('click', (event) => { onCellClick(event) });
         }
     }
     boardData = new BoardData(getInitialBoard());
     pieces = getInitialBoard();
-    // pieces[20].getPossibleMoves(); test //NEED TO FIX THIX! (error at 174:16, 47:38 (realtiveMoves is not defined))
 
 
     for (let piece of boardData.pieces) {
-        // console.log(boardData.pieces)
         // Only add an image to cells that are not empty.
         if (piece !== undefined && piece.type !== 'empty') addImage(table.rows[piece.row].cells[piece.col], piece.player, piece.type);
     }
